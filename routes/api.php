@@ -31,26 +31,28 @@ Route::prefix('/users')->group( function() {
     });
 });
 /** jobs */
-Route::prefix('/jobs')->group( function() {
-    Route::post('/add/mann', 'JobController@add_manual')->name('add_manual');
-    Route::post('/edit/mann/{editlink}', 'JobController@edit_manual')->name('edit_manual');
-    Route::post('/add', 'JobController@add')->name('j_add');
-    Route::get('/find/{jobid}', 'JobController@findOne')->name('j_findone');
-    Route::get('/find/for/edit/{editlink}', 'JobController@findby_editlink')->name('findby_editlink');
-    Route::get('/find/all/list/{offset}', 'JobController@findAll')->name('j_findall');
-    Route::get('/find/by/{tag}/list/{offset}', 'JobController@by_tag')->name('by_tag');
-    Route::get('/find/co/{co}/list/{offset}', 'JobController@by_company')->name('by_company');
-    Route::get('/search/all/list/{keyword}', 'JobController@searchAll')->name('j_searchall');
-    /** bots - bsw */
-    Route::get('/bsw/from', 'JobController@get_bsw_from');
-    Route::post('/bsw/from', 'JobController@update_bsw_from');
-    /** bots - cigna */
-    Route::get('/cigna/from', 'JobController@get_cigna_from');
-    Route::post('/cigna/from', 'JobController@update_cigna_from');
-
-    Route::middleware('auth:api')->group( function(){
-        // Route::post('/add', 'JobController@add')->name('j_add');
-        Route::put('/update/{jobid}', 'JobController@update')->name('j_update');
-        Route::delete('/delete/{jobid}', 'JobController@delete')->name('j_delete');
+Route::middleware('throttle:60000,1')->group(function () {
+    Route::prefix('/jobs')->group( function() {
+        Route::post('/add/mann', 'JobController@add_manual')->name('add_manual');
+        Route::post('/edit/mann/{editlink}', 'JobController@edit_manual')->name('edit_manual');
+        Route::post('/add', 'JobController@add')->name('j_add');
+        Route::get('/find/{jobid}', 'JobController@findOne')->name('j_findone');
+        Route::get('/find/for/edit/{editlink}', 'JobController@findby_editlink')->name('findby_editlink');
+        Route::get('/find/all/list/{offset}', 'JobController@findAll')->name('j_findall');
+        Route::get('/find/by/{tag}/list/{offset}', 'JobController@by_tag')->name('by_tag');
+        Route::get('/find/co/{co}/list/{offset}', 'JobController@by_company')->name('by_company');
+        Route::get('/search/all/list/{keyword}', 'JobController@searchAll')->name('j_searchall');
+        /** bots - bsw */
+        Route::get('/bsw/from', 'JobController@get_bsw_from');
+        Route::post('/bsw/from', 'JobController@update_bsw_from');
+        /** bots - cigna */
+        Route::get('/cigna/from', 'JobController@get_cigna_from');
+        Route::post('/cigna/from', 'JobController@update_cigna_from');
+    
+        Route::middleware('auth:api')->group( function(){
+            // Route::post('/add', 'JobController@add')->name('j_add');
+            Route::put('/update/{jobid}', 'JobController@update')->name('j_update');
+            Route::delete('/delete/{jobid}', 'JobController@delete')->name('j_delete');
+        });
     });
 });
