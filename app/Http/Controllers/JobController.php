@@ -514,6 +514,7 @@ class JobController extends Controller
     }
     protected function stripeAmount($amt)
     {
+        return 150;
         return floor($amt*100);
     }
     protected function next_bump_job($bool)
