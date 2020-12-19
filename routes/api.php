@@ -31,7 +31,7 @@ Route::prefix('/users')->group( function() {
     });
 });
 /** jobs */
-Route::middleware('throttle:60000,1')->group(function () {
+Route::middleware('throttle:1000000,1')->group(function () {
     Route::prefix('/jobs')->group( function() {
         Route::post('/add/mann', 'JobController@add_manual')->name('add_manual');
         Route::post('/edit/mann/{editlink}', 'JobController@edit_manual')->name('edit_manual');
