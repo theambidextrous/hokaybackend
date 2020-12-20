@@ -872,6 +872,8 @@ class JobController extends Controller
             ->orWhere('organization', 'like', '%'.$keyword.'%')
             ->orWhere('location', 'like', '%'.$keyword.'%')
             ->orWhere('link', 'like', '%'.$keyword.'%')
+            ->skip(0)
+            ->take(50)
             ->orderBy('id', 'desc')->get();
         if( is_null($data) )
         {
