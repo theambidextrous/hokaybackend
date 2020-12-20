@@ -99,7 +99,7 @@
             <i><p style="color:#000;">Healthcare Okay is the most popular Healthcare jobs board in the United States.<br> We are trusted by millions of Healthcare professionals and tens of thousands of Healthcare companies.</p></i>
         </div>
 
-        <div style=" width:80%;
+        <div style=" width:100%;
             background:#908c8d 0% 0% no-repeat padding-box;
             border-bottom-right-radius:13px;
             border-bottom-left-radius:13px;
