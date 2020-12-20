@@ -15,4 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+    // $data = [
+    //     'amount' => 345.80,
+    //     'receipt' => 'MFH34hGT5',
+    // ];
+    // return view('emails.temp', ['data'=>$data]);
 });
