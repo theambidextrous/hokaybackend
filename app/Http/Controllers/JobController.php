@@ -717,6 +717,8 @@ class JobController extends Controller
     {
         $org = join(' ', explode('-', $co));
         $data = Job::where('organization', $org)
+            ->skip(0)
+            ->take(60)
             ->orderBy('id', 'desc')
             ->get();
         if( is_null($data) )
