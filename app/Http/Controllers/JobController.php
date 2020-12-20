@@ -800,6 +800,7 @@ class JobController extends Controller
     {
         $data = Job::where('sticky_day', true)
             ->where('created_at', '>=', Carbon::parse('-24 hours'))
+            ->orderBy('id', 'desc')
             ->get();
         if(!is_null($data))
         {
@@ -811,6 +812,7 @@ class JobController extends Controller
     {
         $data = Job::where('sticky_week', true)
             ->where('created_at', '>=', Carbon::parse('-7 days'))
+            ->orderBy('id', 'desc')
             ->get();
         if(!is_null($data))
         {
@@ -822,6 +824,7 @@ class JobController extends Controller
     {
         $data = Job::where('sticky_month', true)
             ->where('created_at', '>=', Carbon::parse('-30 days'))
+            ->orderBy('id', 'desc')
             ->get();
         if(!is_null($data))
         {
