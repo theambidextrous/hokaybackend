@@ -621,11 +621,29 @@ class JobController extends Controller
             ], 200);
         }
         $jobId = Job::create($input)->id;
+        $this->un_yellow_it($jobId);
         return response([
             'status' => 200,
             'message' => "Success. Job posted",
             'jobId' => $jobId,
         ], 200);
+    }
+    protected function un_yellow_it($last_id)
+    {
+        $id_0 = $last_id;
+        $id_1 = $last_id - 1;
+        $id_2 = $last_id - 2;
+        $ids = [ $id_0, $id_1, $id_2 ];
+        Job::where('co_mail', null)->update([
+            'yellow_it'=> false,
+            'sticky_week'=> false,
+            'sticky_day'=> false,
+            'sticky_month'=> false,
+        ]);
+        Job::whereIn('id', $ids)->update([
+            'yellow_it'=> true,
+            'sticky_week'=> true,
+        ]);
     }
     protected function extract_tag($string)
     {
