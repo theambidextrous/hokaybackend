@@ -863,7 +863,7 @@ class JobController extends Controller
             ->whereNotIn('id', $sticky_ids)
             ->where('is_visible', true)
             ->skip($offset)
-            ->take(10)
+            ->take(50)
             ->orderBy('id', 'desc')
             ->get();
 
