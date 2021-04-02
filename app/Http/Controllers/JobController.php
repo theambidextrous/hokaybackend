@@ -766,6 +766,7 @@ class JobController extends Controller
         $sticky = array_merge($sticky_month, $sticky_week, $sticky_day);
         $sticky_ids = $this->extract_ids($sticky);
 
+        $tag = str_replace("-jobs", "", $tag);
         $tag_arr = explode('-', $tag);
         $data = null;
         if(count($tag_arr) > 1 )
@@ -773,10 +774,10 @@ class JobController extends Controller
             $data = Job::where('id', '>', 0)
             ->where('title', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->whereNotIn('id', $sticky_ids)
-            ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
+            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->orWhere('primary_tag', 'like', '%' . $tag . '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[0]). '%')
-            ->orWhere('description', 'like', '%' . strtolower($tag_arr[1]). '%')
+            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[1]). '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[1]). '%')
             ->skip($offset)
             ->take(50)
@@ -788,7 +789,7 @@ class JobController extends Controller
             $data = Job::where('id', '>', 0)
             ->where('title', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->whereNotIn('id', $sticky_ids)
-            ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
+            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->orWhere('primary_tag', 'like', '%' . $tag . '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->skip($offset)
