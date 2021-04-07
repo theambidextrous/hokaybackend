@@ -774,10 +774,10 @@ class JobController extends Controller
             $data = Job::where('id', '>', 0)
             ->where('title', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->whereNotIn('id', $sticky_ids)
-            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
+            ->orWhere('location', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->orWhere('primary_tag', 'like', '%' . $tag . '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[0]). '%')
-            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[1]). '%')
+            ->orWhere('location', 'like', '%' . strtolower($tag_arr[1]). '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[1]). '%')
             ->skip($offset)
             ->take(50)
@@ -789,7 +789,7 @@ class JobController extends Controller
             $data = Job::where('id', '>', 0)
             ->where('title', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->whereNotIn('id', $sticky_ids)
-            // ->orWhere('description', 'like', '%' . strtolower($tag_arr[0]). '%')
+            ->orWhere('location', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->orWhere('primary_tag', 'like', '%' . $tag . '%')
             ->orWhere('tags', 'like', '%' . strtolower($tag_arr[0]). '%')
             ->skip($offset)
@@ -883,34 +883,51 @@ class JobController extends Controller
         return response([
             'status' => 200,
             'message' => "Success. Jobs found",
-            'payload' => $data,
+            'payload' => $this->shuffle_assoc($data),
             'total_count' => $this->count_all(),
             'limit' => 100
         ], 200);
     }
     public function searchAll($keyword)
     {
-        $data = Job::where('title', 'like', '%'.$keyword.'%')
-            ->orWhere('brief', 'like', '%'.$keyword.'%')
-            ->orWhere('description', 'like', '%'.$keyword.'%')
-            ->orWhere('organization', 'like', '%'.$keyword.'%')
-            ->orWhere('location', 'like', '%'.$keyword.'%')
-            ->orWhere('link', 'like', '%'.$keyword.'%')
+        $arr_a = $arr_b = [];
+        $split_keywords = explode(" ", $keyword);
+        $first = $split_keywords[0];
+        $data = Job::where('title', 'like', '%'.$first.'%')
+            ->orWhere('brief', 'like', '%'.$first.'%')
+            ->orWhere('description', 'like', '%'.$first.'%')
+            ->orWhere('organization', 'like', '%'.$first.'%')
+            ->orWhere('location', 'like', '%'.$first.'%')
+            ->orWhere('link', 'like', '%'.$first.'%')
             ->skip(0)
             ->take(50)
             ->orderBy('id', 'desc')->get();
-        if( is_null($data) )
+        if( !is_null($data) )
         {
-            return response([
-                'status' => 200,
-                'message' => "Success. No Jobs found",
-                'payload' => [],
-            ], 200);
+            $arr_a = $data->toArray();
         } 
+        if(count($split_keywords) > 1)
+        {
+            $second = $split_keywords[1];
+            $data_b = Job::where('title', 'like', '%'.$second.'%')
+                ->orWhere('brief', 'like', '%'.$second.'%')
+                ->orWhere('description', 'like', '%'.$second.'%')
+                ->orWhere('organization', 'like', '%'.$second.'%')
+                ->orWhere('location', 'like', '%'.$second.'%')
+                ->orWhere('link', 'like', '%'.$second.'%')
+                ->skip(0)
+                ->take(50)
+                ->orderBy('id', 'desc')->get();
+            if( !is_null($data_b) )
+            {
+                $arr_b = $data_b->toArray();
+            } 
+        }
+        $final = array_merge($arr_a, $arr_b);
         return response([
             'status' => 200,
             'message' => "Success. Jobs found",
-            'payload' => $this->filter_visible($data->toArray()),
+            'payload' => $this->filter_visible($final),
         ], 200);
     }
     public function delete($jobId)
@@ -933,6 +950,17 @@ class JobController extends Controller
             }
         }
         return $filtered;
+    }
+    protected function shuffle_assoc($list) {
+        if (!is_array($list)) return $list;
+      
+        $keys = array_keys($list);
+        shuffle($keys);
+        $random = array();
+        foreach ($keys as $key)
+          $random[$key] = $list[$key];
+      
+        return $random;
     }
     protected function extract_ids($sticky)
     {
