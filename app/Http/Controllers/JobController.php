@@ -880,6 +880,7 @@ class JobController extends Controller
         } 
         $data = $data->toArray();
         $data = array_merge($sticky, $data);
+        shuffle($data);
         return response([
             'status' => 200,
             'message' => "Success. Jobs found",
