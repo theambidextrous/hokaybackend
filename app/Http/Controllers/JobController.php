@@ -883,7 +883,7 @@ class JobController extends Controller
         return response([
             'status' => 200,
             'message' => "Success. Jobs found",
-            'payload' => $this->shuffle_assoc($data),
+            'payload' => shuffle($data),
             'total_count' => $this->count_all(),
             'limit' => 100
         ], 200);
