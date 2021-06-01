@@ -879,7 +879,10 @@ class JobController extends Controller
         } 
         $data = $data->toArray();
         shuffle($data);
-        $data = array_merge($sticky, $data);
+        if( intval($page) == 1 )
+        {
+            $data = array_merge($sticky, $data);
+        }
         return response($data, 200);
     }
     public function findAll($offset)
