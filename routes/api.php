@@ -30,6 +30,14 @@ Route::prefix('/users')->group( function() {
         Route::post('/info', 'UserController@info')->name('info');
     });
 });
+
+/** Jobs new */
+Route::middleware('throttle:1000000,1')->group(function () {
+    Route::prefix('/find')->group( function() {
+        Route::get('/jobs/page/{page}/limit/{limit}', 'JobController@findInifinite')->name('findInifinite');
+    });
+});
+
 /** jobs */
 Route::middleware('throttle:1000000,1')->group(function () {
     Route::prefix('/jobs')->group( function() {

@@ -853,6 +853,35 @@ class JobController extends Controller
         }
         return [];
     }
+    public function findInifinite($page, $limit)
+    {
+        $offset = $page * $limit;
+        if( intval($page) == 1)
+        {
+            $offset = 0;
+        }
+        $sticky_day = $this->find_sticky_day();
+        $sticky_week = $this->find_sticky_week();
+        $sticky_month = $this->find_sticky_month();
+        $sticky = array_merge($sticky_month, $sticky_week, $sticky_day);
+        $sticky_ids = $this->extract_ids($sticky);
+        $data = Job::where('id', '>', 0)
+            ->whereNotIn('id', $sticky_ids)
+            ->where('is_visible', true)
+            ->skip($offset)
+            ->take($limit)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if( is_null($data) )
+        {
+            return response($data, 200);
+        } 
+        $data = $data->toArray();
+        shuffle($data);
+        $data = array_merge($sticky, $data);
+        return response($data, 200);
+    }
     public function findAll($offset)
     {
         $sticky_day = $this->find_sticky_day();
