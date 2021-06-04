@@ -853,6 +853,28 @@ class JobController extends Controller
         }
         return [];
     }
+    public function searchInifinite($keyword, $location, $page, $limit)
+    {
+        $offset = $page * $limit;
+        if( intval($page) == 1)
+        {
+            $offset = 0;
+        }
+        $data = Job::where('title', 'like', '%' . $keyword . '%')
+            ->where('location', 'like', '%' . $location . '%')
+            ->where('is_visible', true)
+            ->orderBy('id', 'desc')
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+
+        if( !is_object($data) )
+        {
+            return response([], 200);
+        } 
+        $data = $data->toArray();
+        return response($data, 200);
+    }
     public function findInifinite($page, $limit)
     {
         $offset = $page * $limit;
@@ -874,9 +896,9 @@ class JobController extends Controller
             ->take($limit)
             ->get();
 
-        if( is_null($data) )
+        if( !is_object($data) )
         {
-            return response($data, 200);
+            return response([], 200);
         } 
         $data = $data->toArray();
         shuffle($data);

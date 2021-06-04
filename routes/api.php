@@ -31,10 +31,16 @@ Route::prefix('/users')->group( function() {
     });
 });
 
-/** Jobs new */
+/** Jobs find --new */
 Route::middleware('throttle:1000000,1')->group(function () {
-    Route::prefix('/find')->group( function() {
-        Route::get('/jobs/page/{page}/limit/{limit}', 'JobController@findInifinite')->name('findInifinite');
+    Route::prefix('/find/jobs')->group( function() {
+        Route::get('/page/{page}/limit/{limit}', 'JobController@findInifinite')->name('findInifinite');
+    });
+});
+/** Jobs search --new */
+Route::middleware('throttle:1000000,1')->group(function () {
+    Route::prefix('/search')->group( function() {
+        Route::get('/jobs/{keyword}/loc/{location}/page/{page}/limit/{limit}', 'JobController@searchInifinite')->name('searchInifinite');
     });
 });
 
